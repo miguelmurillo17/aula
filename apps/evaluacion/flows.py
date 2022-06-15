@@ -3,7 +3,10 @@ from viewflow.base import this, Flow
 from viewflow.flow.views import CreateProcessView, UpdateProcessView
 
 from .models import HelloWorldProcess
+from .models import EvaluacionProcess
+#from .views import IniciarEvaluacionView
 from viewflow import frontend
+
 
 @frontend.register
 class HelloWorldFlow(Flow):
@@ -43,3 +46,37 @@ class HelloWorldFlow(Flow):
 
     def send_hello_world_request(self, activation):
         print(activation.process.text)
+
+
+@frontend.register
+class EvaluacionFlow(Flow):
+    process_class = EvaluacionProcess
+
+    inicio = (
+        flow.Start(
+            CreateProcessView,
+            fields=['text']
+        ).Permission(
+            auto_create=True
+        ).Next(this.resolver_evaluacion)
+    )
+
+    resolver_evaluacion = (
+        flow.View(
+            UpdateProcessView,
+            fields = ["text"]
+        ).Permission(
+            auto_create=True
+        ).Next(this.ver_resultados)
+    )
+
+    ver_resultados = (
+        flow.View(
+            UpdateProcessView,
+            fields=["text"]
+        ).Permission(
+            auto_create=True
+        ).Next(this.fin)
+    )
+
+    fin = flow.End()

@@ -1,6 +1,7 @@
 from django.db import models
 from viewflow.models import Process
 import datetime
+from django.db.models.deletion import CASCADE
 
 # Create your models here.
 class HelloWorldProcess(Process):
@@ -91,9 +92,56 @@ class EvaluacionProcess(Process):
         ('3','3'),
         ('5','5')
     ]
+    
+    text = models.CharField(max_length=20)
+    aprobado =  models.BooleanField(default=False)
+    #fecha = models.DateField()
+    #ejeTematico = models.ForeignKey(EjeTematico, null=False, blank=False, default=1, on_delete=models.CASCADE)
+    #grupo = models.ForeignKey(Grupo,null=False,blank=False,default=1,on_delete=CASCADE)
+    #cantidadPreguntas = models.CharField(max_length=9,choices=preguntas,null=False,blank=False)
+
+
+"""
+class EvaluacionProcess(Process):
+    preguntas = [
+        ('1','1'),
+        ('3','3'),
+        ('5','5')
+    ]
     fecha = models.DateField()
     grupo = models.ForeignKey(Grupo,null=False,blank=False,default=1,on_delete=models.CASCADE)
     ejeTematico = models.ForeignKey(EjeTematico, null=False, blank=False, default=1, on_delete=models.CASCADE)
     cantidadPreguntas = models.CharField(max_length=9,choices=preguntas,null=False,blank=False)
     comentarios = models.CharField(max_length=20)
     aprobado =  models.BooleanField(default=False)
+
+class Evaluacion(models.Model):
+    grupo = models.ForeignKey(Grupo, null=False, blank=False, on_delete=models.CASCADE)
+    area = models.ForeignKey(Area, null=False, blank=False, on_delete=models.CASCADE)
+    fechaInicio = models.DateTimeField(null=False, blank=True)
+    fechaFin = models.DateTimeField(null=False)
+    codigoAcceso = models.CharField(max_length=10, null=False, blank=False, default='123456789$')
+
+    def __str__(self):
+        cadena = '{0} - {1} - {2}'
+        return cadena.format(self.grupo, self.area, self.fechaInicio)
+
+
+# Capturas:
+class RespuestaEvaluacion(models.Model):
+    evaluacion = models.ForeignKey(Evaluacion, null=False, blank=False, on_delete=models.CASCADE)
+    pregunta = models.ForeignKey(Pregunta, null=False, blank=False, on_delete=models.CASCADE)
+    respuestaAlumno = models.CharField(max_length = 1 , null=False, blank=False)
+
+
+# Configuraciones:
+
+#class Grupo_alumno(models.Model):
+#    alumno = models.ForeignKey(Alumno, null=False, blank=False, on_delete=models.CASCADE)
+#    grupo = models.ForeignKey(Grupo, null=False, blank=False, on_delete=models.CASCADE)
+#    #creacion = models.DateTimeField(auto_now_add=True, blank=True)
+#    #actualizacion = models.DateTimeField(auto_now=True)
+
+#    def __str__(self):
+#        return self.grupo
+"""
